@@ -51,9 +51,9 @@ function playRound(playerSelection, computerSelection){
 
 function game() {
     const maxRounds = 5;
-    let playerWins = 0;
-    let computerWins = 0;
-    let draws = 0;
+    let playerWinCount = 0;
+    let computerWinCount = 0;
+    let drawCount = 0;
 
     for (let currentRound = 1; currentRound <= maxRounds; currentRound++){
         //get the selection form the player
@@ -64,9 +64,9 @@ function game() {
             // play the round
             let result = playRound(playerChoice, getComputerChoice());
             // add otucome to results counters
-            if (result==="Win") { playerWins++ }
-            if (result==="Lose") { computerWins++ }
-            if (result==="Draw" ) { draws++ }
+            if (result==="Win") { playerWinCount++ }
+            if (result==="Lose") { computerWinCount++ }
+            if (result==="Draw" ) { drawCount++ }
         } else {
             alert(`You entered ${playerChoice}. That's not a valid option, the choices are: Rock, Paper or Scissors.`)
             // There was not a valid selection so this round doesn't count. Decrement round count so this round isn't included in the total.
@@ -75,11 +75,11 @@ function game() {
         
     }
 
-    console.log(`Results: ${playerWins} wins, ${computerWins} losses, ${draws} draws.`);
+    console.log(`Results: ${playerWinCount} wins, ${computerWinCount} losses, ${drawCount} draws.`);
 
-    if (playerWins === computerWins){
+    if (playerWinCount === computerWinCount){
         return "You drew with the computer."
-    } else if (playerWins > computerWins){
+    } else if (playerWinCount > computerWinCount){
         return "Yay! You won!"
     } else {
         return "Oh no! You lost."
@@ -87,9 +87,12 @@ function game() {
 }
 
 function validatePlayerSelection(playerChoice){
+    // If the player didn't enter any text or clicked cancel then the choice will be null.
     if (playerChoice == null){ return false}
 
+    // The player may have used any case when typing their selection.
     let playerChoiceUpper = playerChoice.toUpperCase();
+    // the only allowable options are rock, paper and scissors.
     if(playerChoiceUpper == "ROCK" || playerChoiceUpper == "PAPER" || playerChoiceUpper == "SCISSORS") {
         return true;
     } else { return false }
