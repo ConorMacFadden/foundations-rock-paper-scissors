@@ -14,10 +14,9 @@ function getComputerChoice(){
 }
 
 function playRound(playerSelection, computerSelection){
-    let outcomeMessage = "";
     let computerSelectionUpperCase = computerSelection.toUpperCase();
 
-    let playerWinStatus = "draw";
+    let playerWinStatus = "Draw";
 
     switch(playerSelection.toUpperCase()){
         case "ROCK":
@@ -45,6 +44,41 @@ function playRound(playerSelection, computerSelection){
             break;
     }
 
+    console.log(playerWinStatus);
     return playerWinStatus;
 
+}
+
+function game() {
+    const maxRounds = 5;
+    let playerWins = 0;
+    let computerWins = 0;
+    let draws = 0;
+
+    for (let currentRound = 1; currentRound <= maxRounds; currentRound++){
+        let playerChoice = prompt(`Round ${currentRound} of ${maxRounds}. Make a choice: Rock, Paper or Scissors?`);
+        let playerChoiceUpper = playerChoice.toUpperCase();
+
+        if(playerChoiceUpper == "ROCK" || playerChoiceUpper == "PAPER" || playerChoiceUpper == "SCISSORS") {
+            let result = playRound(playerChoice, getComputerChoice());
+            if (result==="Win") { playerWins++ }
+            if (result==="Lose") { computerWins++ }
+            if (result==="Draw" ) { draws++ }
+        } else {
+            alert(`You entered ${playerChoice}. That's not a valid option, the choices are: Rock, Paper or Scissors.`)
+            // There was not a valid selection so this round doesn't count. Decrement round count so this round isn't included in the total.
+            currentRound--;
+        }
+        
+    }
+
+    console.log(`Results: ${playerWins} wins, ${computerWins} losses, ${draws} draws.`);
+
+    if (playerWins === computerWins){
+        return "You drew with the computer."
+    } else if (playerWins > computerWins){
+        return "Yay! You won!"
+    } else {
+        return "Oh no! You lost."
+    }
 }
