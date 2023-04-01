@@ -56,11 +56,14 @@ function game() {
     let draws = 0;
 
     for (let currentRound = 1; currentRound <= maxRounds; currentRound++){
+        //get the selection form the player
         let playerChoice = prompt(`Round ${currentRound} of ${maxRounds}. Make a choice: Rock, Paper or Scissors?`);
-        let playerChoiceUpper = playerChoice.toUpperCase();
 
-        if(playerChoiceUpper == "ROCK" || playerChoiceUpper == "PAPER" || playerChoiceUpper == "SCISSORS") {
+        // check that they have typed a valid option
+        if (validatePlayerSelection(playerChoice)){
+            // play the round
             let result = playRound(playerChoice, getComputerChoice());
+            // add otucome to results counters
             if (result==="Win") { playerWins++ }
             if (result==="Lose") { computerWins++ }
             if (result==="Draw" ) { draws++ }
@@ -81,4 +84,14 @@ function game() {
     } else {
         return "Oh no! You lost."
     }
+}
+
+function validatePlayerSelection(playerChoice){
+    if (playerChoice == null){ return false}
+
+    let playerChoiceUpper = playerChoice.toUpperCase();
+    if(playerChoiceUpper == "ROCK" || playerChoiceUpper == "PAPER" || playerChoiceUpper == "SCISSORS") {
+        return true;
+    } else { return false }
+
 }
