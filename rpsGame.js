@@ -1,3 +1,9 @@
+const maxRounds = 5;
+let currentRound = 1;
+let playerWinCount = 0;
+let computerWinCount = 0;
+let drawCount = 0;
+
 function getComputerChoice(){
     let computerChoiceNumeric = Math.floor(Math.random()*3);
 
@@ -12,6 +18,18 @@ function getComputerChoice(){
             return "Scissors"
     }
 }
+
+const slectionButtons = document.querySelectorAll('.playerSelection');
+slectionButtons.forEach(selectionButton => {
+    selectionButton.addEventListener('click', (e) => {
+        if(currentRound>maxRounds){
+            currentRound=1;
+            resetGame();
+        }
+        playRound(e.target.textContent, getComputerChoice());
+    });
+});
+
 
 function playRound(playerSelection, computerSelection){
     let computerSelectionUpperCase = computerSelection.toUpperCase();
@@ -43,40 +61,39 @@ function playRound(playerSelection, computerSelection){
             }
             break;
     }
+    // round complete, update results totals as appropriate
+    processResults(playerWinStatus);
 
-    console.log(playerWinStatus);
+    currentRound++;
     return playerWinStatus;
 
 }
 
-function game() {
-    const maxRounds = 5;
-    let playerWinCount = 0;
-    let computerWinCount = 0;
-    let drawCount = 0;
+function processResults(result){
+    // add otucome to results counters
+    if (result==="Win") { playerWinCount++ }
+    if (result==="Lose") { computerWinCount++ }
+    if (result==="Draw" ) { drawCount++ }
 
-    for (let currentRound = 1; currentRound <= maxRounds; currentRound++){
-        //get the selection form the player
-        let playerChoice = prompt(`Round ${currentRound} of ${maxRounds}. Make a choice: Rock, Paper or Scissors?`);
+    updateResults(`Results: ${playerWinCount} wins, ${computerWinCount} losses, ${drawCount} draws.`);
 
-        // check that they have typed a valid option
-        if (validatePlayerSelection(playerChoice)){
-            // play the round
-            let result = playRound(playerChoice, getComputerChoice());
-            // add otucome to results counters
-            if (result==="Win") { playerWinCount++ }
-            if (result==="Lose") { computerWinCount++ }
-            if (result==="Draw" ) { drawCount++ }
-        } else {
-            alert(`You entered ${playerChoice}. That's not a valid option, the choices are: Rock, Paper or Scissors.`)
-            // There was not a valid selection so this round doesn't count. Decrement round count so this round isn't included in the total.
-            currentRound--;
-        }
-        
+    if (currentRound == maxRounds){
+        const endingTextDiv = document.querySelector('.endStatement');
+        endingTextDiv.textContent = gameEndStatement();
     }
+}
 
-    console.log(`Results: ${playerWinCount} wins, ${computerWinCount} losses, ${drawCount} draws.`);
+function resetGame() {
+    const endingTextDiv = document.querySelector('.endStatement');
+    endingTextDiv.textContent = "";
+    playerWinCount = 0;
+    computerWinCount = 0;
+    drawCount = 0;
+    updateResults(`Results: ${playerWinCount} wins, ${computerWinCount} losses, ${drawCount} draws.`);
 
+}
+
+function gameEndStatement(){
     if (playerWinCount === computerWinCount){
         return "You drew with the computer."
     } else if (playerWinCount > computerWinCount){
@@ -97,4 +114,9 @@ function validatePlayerSelection(playerChoice){
         return true;
     } else { return false }
 
+}
+
+function updateResults(text) {
+    const resultsDiv = document.querySelector('.results');
+    resultsDiv.textContent = text;
 }

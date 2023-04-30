@@ -1,0 +1,7 @@
+.selectionButtonContainer {
+    display: flex;
+}
+
+.playerSelection {
+ font-size: 24px;   
+}
